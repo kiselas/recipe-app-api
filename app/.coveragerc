@@ -1,0 +1,8 @@
+[run]
+source =
+    core
+    user
+
+[report]
+show_missing = true
+precision = 2
