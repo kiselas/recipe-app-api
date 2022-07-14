@@ -242,5 +242,3 @@ class PrivateRecepiAPITests(TestCase):
                 user=self.user,
             ).exists()
             self.assertTrue(exists)
-
-
