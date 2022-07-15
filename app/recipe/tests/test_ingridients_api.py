@@ -17,7 +17,7 @@ INGRIDIENTS_URL = reverse('recipe:ingridient-list')
 
 
 def detail_url(ingridient_id):
-    """Create and return a ingridient detail URL."""
+    """Create and return an ingridient detail URL."""
     return reverse('recipe:ingridient-detail', args=[ingridient_id])
 
 
@@ -72,3 +72,27 @@ class PrivateIngridientsApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], ingridient.name)
         self.assertEqual(res.data[0]['id'], ingridient.id)
+
+    def test_update_ingridient(self):
+        """Test updating an ingridient."""
+        ingridient = Ingridient.objects.create(user=self.user, name='Salt')
+
+        payload = {'name': 'Pepper'}
+        url = detail_url(ingridient.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        ingridient.refresh_from_db()
+
+        self.assertEqual(ingridient.name, payload['name'])
+
+    def test_delete_ingridient(self):
+        """Test deleting an ingridient."""
+        ingridient = Ingridient.objects.create(user=self.user, name='Salt')
+
+        url = detail_url(ingridient.id)
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        ingridients = Ingridient.objects.filter(user=self.user)
+        self.assertFalse(ingridients.exists())

@@ -54,7 +54,10 @@ class TagViewSet(mixins.DestroyModelMixin,
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
-class IngridientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class IngridientViewSet(mixins.DestroyModelMixin,
+                        mixins.UpdateModelMixin,
+                        mixins.ListModelMixin,
+                        viewsets.GenericViewSet):
     """Manage ingridients in the database."""
     serializer_class = serializers.IngridientSerializer
     queryset = Ingridient.objects.all()
